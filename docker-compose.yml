@@ -1,0 +1,26 @@
+version: '2'
+services:
+
+  dev:
+    image: nodesource/jessie
+    environment:
+      NODE_ENV: 'dev'
+    ports:
+      - "8080:8080"
+    volumes:
+     - .:/usr/src/app
+    command: npm start
+
+  builder:
+    image: nodesource/jessie
+    environment:
+      NODE_ENV: 'production'
+    volumes:
+     - .:/usr/src/app
+    command: npm run build
+
+  web:
+    build:
+      context: .
+    ports:
+      - "8080:80"
