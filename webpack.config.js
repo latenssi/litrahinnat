@@ -1,14 +1,19 @@
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const OfflinePlugin = require('offline-plugin')
 
 module.exports = {
   entry: {
-    app: "./src/main.jsx"
+    app: "./src/main.jsx",
+    vendor: [
+      "react",
+      "react-dom"
+    ]
   },
   output: {
     path: './dist',
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     publicPath: '/'
   },
   externals: {
@@ -40,7 +45,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body',
-      hash: true
-    })
+      hash: false
+    }),
+    new webpack.optimize.CommonsChunkPlugin(
+      /* chunkName= */"vendor",
+      /* filename= */ "[name].bundle.js"
+    ),
+    new OfflinePlugin()
   ]
 }
